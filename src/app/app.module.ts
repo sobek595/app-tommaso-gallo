@@ -10,6 +10,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { HomepageComponent } from './pages/homepage/homepage.component';
 import { authInterceptor } from './utils/auth.interceptor';
+import { urlInterceptor } from './utils/url.interceptor';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { PermessionCardComponent } from './components/permession-card/permession-card.component';
 import { PermessionDetailComponent } from './pages/permession-detail/permession-detail.component';
@@ -44,7 +45,7 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
     BaseChartDirective
   ],
   providers: [provideHttpClient(
-    withInterceptors([authInterceptor])
+    withInterceptors([urlInterceptor, authInterceptor])
   ), provideCharts(withDefaultRegisterables())],
   bootstrap: [AppComponent]
 })
