@@ -1,0 +1,68 @@
+<div class="modal-header border-0 pb-0">
+  <div class="d-flex align-items-center gap-2">
+    <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;">
+      <i class="bi bi-plus-lg text-white"></i>
+    </div>
+    <h5 class="modal-title fw-bold mb-0">Nuova richiesta di permesso</h5>
+  </div>
+  <button type="button" class="btn-close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body pt-3">
+  <div class="alert alert-danger py-2 small" *ngIf="error">
+    <i class="bi bi-exclamation-circle me-1"></i>{{ error }}
+  </div>
+
+  <form [formGroup]="form" id="createForm" (ngSubmit)="onSubmit()">
+    <div class="row g-3">
+
+      <div class="col-12">
+        <label class="form-label fw-semibold small">Categoria <span class="text-danger">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="bi bi-tag text-muted"></i></span>
+          <select class="form-select border-start-0" formControlName="categoryDescription">
+            <option [ngValue]="null" disabled selected>-- Seleziona categoria --</option>
+            <option *ngFor="let c of categories" [value]="c.description">{{ c.description }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6">
+        <label class="form-label fw-semibold small">Data inizio <span class="text-danger">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-event text-muted"></i></span>
+          <input type="date" class="form-control border-start-0" formControlName="dateStart" />
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6">
+        <label class="form-label fw-semibold small">Data fine <span class="text-danger">*</span></label>
+        <div class="input-group">
+          <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-check text-muted"></i></span>
+          <input type="date" class="form-control border-start-0" formControlName="dateEnd" />
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold small">Motivazione <span class="text-danger">*</span></label>
+        <div class="input-group align-items-start">
+          <span class="input-group-text bg-light border-end-0 pt-2"><i class="bi bi-chat-left-text text-muted"></i></span>
+          <textarea class="form-control border-start-0" formControlName="motivation" rows="3" placeholder="Descrivi il motivo della richiesta..."></textarea>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer border-0">
+  <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss()" [disabled]="saving">
+    <i class="bi bi-x me-1"></i>Annulla
+  </button>
+  <button type="submit" form="createForm" class="btn btn-primary" [disabled]="form.invalid || saving"
+          style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none;">
+    <span *ngIf="saving" class="spinner-border spinner-border-sm me-1"></span>
+    <i *ngIf="!saving" class="bi bi-send me-1"></i>
+    Invia richiesta
+  </button>
+</div>

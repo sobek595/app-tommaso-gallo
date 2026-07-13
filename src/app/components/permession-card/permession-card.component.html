@@ -1,0 +1,77 @@
+<div class="card permission-card shadow-sm h-100" (click)="navigateToDetail()" style="cursor:pointer">
+
+  <div class="card-header d-flex justify-content-between align-items-center py-2 px-3">
+    <div class="d-flex align-items-center gap-2">
+      <div class="avatar-sm">
+        <ng-container *ngIf="requester; else rawInitials">
+          {{ requester.firstName.charAt(0) }}{{ requester.lastName.charAt(0) }}
+        </ng-container>
+        <ng-template #rawInitials>?</ng-template>
+      </div>
+      <span class="fw-semibold">
+        <ng-container *ngIf="requester; else rawRequester">
+          {{ requester.firstName }} {{ requester.lastName }}
+        </ng-container>
+        <ng-template #rawRequester>{{ request.userIdRequesting }}</ng-template>
+      </span>
+    </div>
+    <span class="badge {{ statusClass }}">{{ request.status | titlecase }}</span>
+  </div>
+
+  <div class="card-body px-3 py-3">
+
+    <div class="info-row mb-2">
+      <i class="bi bi-tag text-primary"></i>
+      <div>
+        <div class="info-label">Categoria</div>
+        <div class="info-value">
+          <ng-container *ngIf="category; else rawCategory">{{ category.description }}</ng-container>
+          <ng-template #rawCategory>{{ request.categoryId }}</ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-row mb-2">
+      <i class="bi bi-chat-left-text text-primary"></i>
+      <div class="overflow-hidden">
+        <div class="info-label">Motivazione</div>
+        <div class="info-value text-truncate">{{ request.motivation }}</div>
+      </div>
+    </div>
+
+    <div class="d-flex gap-3 mb-2">
+      <div class="info-row flex-fill">
+        <i class="bi bi-calendar-event text-primary"></i>
+        <div>
+          <div class="info-label">Inizio</div>
+          <div class="info-value">{{ request.dateStart ? (request.dateStart | date:'dd/MM/yy') : '-' }}</div>
+        </div>
+      </div>
+      <div class="info-row flex-fill">
+        <i class="bi bi-calendar-check text-primary"></i>
+        <div>
+          <div class="info-label">Fine</div>
+          <div class="info-value">{{ request.dateEnd ? (request.dateEnd | date:'dd/MM/yy') : '-' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-row" *ngIf="request.userIdApproving">
+      <i class="bi" [class.bi-hand-thumbs-up]="request.status === 'approved'" [class.bi-hand-thumbs-down]="request.status !== 'approved'" [class.text-success]="request.status === 'approved'" [class.text-danger]="request.status !== 'approved'"></i>
+      <div>
+        <div class="info-label">{{ request.status === 'approved' ? 'Approvata da' : 'Rifiutata da' }}</div>
+        <div class="info-value">
+          <ng-container *ngIf="approver; else rawApprover">{{ approver.firstName }} {{ approver.lastName }}</ng-container>
+          <ng-template #rawApprover>{{ request.userIdApproving }}</ng-template>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card-footer d-flex justify-content-end text-muted small py-2 px-3">
+    <i class="bi bi-clock me-1"></i>
+    {{ request.dateRequested | date:'dd/MM/yyyy HH:mm' }}
+  </div>
+
+</div>

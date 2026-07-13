@@ -1,0 +1,226 @@
+<div class="container mt-4">
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <!-- Errore -->
+  <div *ngIf="error" class="alert alert-danger d-flex align-items-center gap-2">
+    <i class="bi bi-exclamation-circle-fill"></i>{{ error }}
+  </div>
+
+  <!-- Contenuto -->
+  <ng-container *ngIf="request && !loading">
+
+    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 mb-4" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Torna alla lista
+    </button>
+
+    <div class="card detail-card shadow">
+
+      <!-- Header -->
+      <div class="card-header d-flex justify-content-between align-items-center py-3 px-4">
+        <div class="d-flex align-items-center gap-3">
+          <div class="avatar-lg">
+            <ng-container *ngIf="requester; else rawInitial">
+              {{ requester.firstName.charAt(0) }}{{ requester.lastName.charAt(0) }}
+            </ng-container>
+            <ng-template #rawInitial>?</ng-template>
+          </div>
+          <div>
+            <h5 class="mb-0 fw-bold">
+              <ng-container *ngIf="requester; else rawRequester">
+                {{ requester.firstName }} {{ requester.lastName }}
+              </ng-container>
+              <ng-template #rawRequester>{{ request.userIdRequesting }}</ng-template>
+            </h5>
+            <small class="text-muted">
+              <i class="bi bi-clock me-1"></i>{{ request.dateRequested | date:'dd/MM/yyyy HH:mm' }}
+            </small>
+          </div>
+        </div>
+        <span [class]="statusClass">{{ request.status | titlecase }}</span>
+      </div>
+
+      <div class="card-body p-4">
+
+        <!-- Vista READ-ONLY -->
+        <div class="row g-3" *ngIf="!editMode">
+
+          <div class="col-12 col-md-6">
+            <div class="detail-field">
+              <span class="detail-label"><i class="bi bi-tag"></i> Categoria</span>
+              <span class="detail-value">
+                <ng-container *ngIf="category; else rawCategory">{{ category.description }}</ng-container>
+                <ng-template #rawCategory>{{ request.categoryId }}</ng-template>
+              </span>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6"></div>
+
+          <div class="col-12">
+            <div class="detail-field">
+              <span class="detail-label"><i class="bi bi-chat-left-text"></i> Motivazione</span>
+              <span class="detail-value">{{ request.motivation }}</span>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="detail-field">
+              <span class="detail-label"><i class="bi bi-calendar-event"></i> Data inizio</span>
+              <span class="detail-value">{{ request.dateStart ? (request.dateStart | date:'dd/MM/yyyy') : '-' }}</span>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="detail-field">
+              <span class="detail-label"><i class="bi bi-calendar-check"></i> Data fine</span>
+              <span class="detail-value">{{ request.dateEnd ? (request.dateEnd | date:'dd/MM/yyyy') : '-' }}</span>
+            </div>
+          </div>
+
+          <ng-container *ngIf="request.userIdApproving">
+            <div class="col-12 col-md-6">
+              <div class="detail-field">
+                <span class="detail-label">
+                  <i class="bi" [class.bi-hand-thumbs-up]="request.status === 'approved'" [class.bi-hand-thumbs-down]="request.status !== 'approved'"></i>
+                  {{ request.status === 'approved' ? 'Approvata da' : 'Rifiutata da' }}
+                </span>
+                <span class="detail-value">
+                  <ng-container *ngIf="approver; else rawApprover">{{ approver.firstName }} {{ approver.lastName }}</ng-container>
+                  <ng-template #rawApprover>{{ request.userIdApproving }}</ng-template>
+                </span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6" *ngIf="request.dateEvaluation">
+              <div class="detail-field">
+                <span class="detail-label"><i class="bi bi-calendar2-check"></i> Data valutazione</span>
+                <span class="detail-value">{{ request.dateEvaluation | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            </div>
+          </ng-container>
+
+        </div>
+
+        <!-- Form EDIT-MODE -->
+        <form [formGroup]="editForm" (ngSubmit)="onSave()" *ngIf="editMode">
+          <div class="row g-3">
+
+            <div class="col-12 col-md-6">
+              <label class="form-label fw-semibold small">Categoria <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-tag text-muted"></i></span>
+                <select class="form-select border-start-0" formControlName="categoryDescription">
+                  <option [ngValue]="null" disabled selected>-- Seleziona categoria --</option>
+                  <option *ngFor="let c of categories" [value]="c.description">{{ c.description }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label fw-semibold small">Data inizio <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-event text-muted"></i></span>
+                <input type="date" class="form-control border-start-0" formControlName="dateStart" />
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <label class="form-label fw-semibold small">Data fine <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar-check text-muted"></i></span>
+                <input type="date" class="form-control border-start-0" formControlName="dateEnd" />
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold small">Motivazione <span class="text-danger">*</span></label>
+              <div class="input-group align-items-start">
+                <span class="input-group-text bg-light border-end-0 pt-2"><i class="bi bi-chat-left-text text-muted"></i></span>
+                <textarea class="form-control border-start-0" formControlName="motivation" rows="3"></textarea>
+              </div>
+            </div>
+
+            <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+              <button type="submit" class="btn btn-primary d-flex align-items-center gap-2" [disabled]="editForm.invalid || saving"
+                      style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none;">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm"></span>
+                <i *ngIf="!saving" class="bi bi-floppy"></i>
+                Salva modifiche
+              </button>
+              <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2" (click)="onEditToggle()" [disabled]="saving">
+                <i class="bi bi-x"></i> Annulla
+              </button>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+
+      <!-- Footer con modifica + delete -->
+      <ng-container *ngIf="!editMode">
+
+        <!-- EMPLOYEE: modifica + elimina (solo su pending) -->
+        <ng-container *appEmployeeOnly="currentUser">
+          <div class="card-footer d-flex justify-content-between align-items-center gap-2 py-3 px-4"
+               *appPendingOnly="request.status">
+            <button class="btn btn-outline-primary d-flex align-items-center gap-2" (click)="onEditToggle()">
+              <i class="bi bi-pencil"></i> Modifica
+            </button>
+            <div class="d-flex gap-2 align-items-center">
+              <ng-container *ngIf="!confirmDelete">
+                <button class="btn btn-outline-danger d-flex align-items-center gap-2" (click)="onDeleteClick()" [disabled]="deleting">
+                  <i class="bi bi-trash"></i> Elimina
+                </button>
+              </ng-container>
+              <ng-container *ngIf="confirmDelete">
+                <span class="text-danger fw-semibold small me-1"><i class="bi bi-exclamation-triangle me-1"></i>Sicuro?</span>
+                <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="onDeleteConfirm()" [disabled]="deleting">
+                  <span *ngIf="deleting" class="spinner-border spinner-border-sm"></span>
+                  <i *ngIf="!deleting" class="bi bi-trash"></i> Sì, elimina
+                </button>
+                <button class="btn btn-secondary btn-sm" (click)="onDeleteCancel()" [disabled]="deleting">Annulla</button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- MANAGER: approve/reject (solo pending) + delete (sempre) -->
+        <ng-container *appManagerOnly="currentUser">
+          <div class="card-footer d-flex justify-content-between align-items-center gap-2 py-3 px-4">
+            <div class="d-flex gap-2">
+              <ng-container *appPendingOnly="request.status">
+                <button class="btn btn-success d-flex align-items-center gap-2" (click)="onApprove()">
+                  <i class="bi bi-hand-thumbs-up"></i> Approva
+                </button>
+                <button class="btn btn-warning d-flex align-items-center gap-2" (click)="onReject()">
+                  <i class="bi bi-hand-thumbs-down"></i> Rifiuta
+                </button>
+              </ng-container>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+              <ng-container *ngIf="!confirmDelete">
+                <button class="btn btn-outline-danger d-flex align-items-center gap-2" (click)="onDeleteClick()" [disabled]="deleting">
+                  <i class="bi bi-trash"></i> Elimina
+                </button>
+              </ng-container>
+              <ng-container *ngIf="confirmDelete">
+                <span class="text-danger fw-semibold small me-1"><i class="bi bi-exclamation-triangle me-1"></i>Sicuro?</span>
+                <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="onDeleteConfirm()" [disabled]="deleting">
+                  <span *ngIf="deleting" class="spinner-border spinner-border-sm"></span>
+                  <i *ngIf="!deleting" class="bi bi-trash"></i> Sì, elimina
+                </button>
+                <button class="btn btn-secondary btn-sm" (click)="onDeleteCancel()" [disabled]="deleting">Annulla</button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+
+      </ng-container>
+    </div>
+
+  </ng-container>
+</div>

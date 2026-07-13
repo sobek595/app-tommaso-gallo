@@ -1,0 +1,40 @@
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
+      <i class="bi bi-list-check text-primary"></i> Richieste di permesso
+    </h5>
+    <div class="d-flex gap-2">
+      <!-- Crea permesso: solo employee -->
+      <button class="btn btn-success d-flex align-items-center gap-2"
+              *appEmployeeOnly="currentUser"
+              (click)="openCreateModal()">
+        <i class="bi bi-plus-circle-fill"></i>
+        <span class="d-none d-sm-inline">Nuova richiesta</span>
+      </button>
+
+      <!-- Filtro da approvare: solo manager -->
+      <button *appManagerOnly="currentUser"
+        class="btn d-flex align-items-center gap-2"
+        [class.btn-primary]="filterActive"
+        [class.btn-outline-primary]="!filterActive"
+        (click)="toggleFilter()">
+        <i class="bi" [class.bi-funnel-fill]="filterActive" [class.bi-funnel]="!filterActive"></i>
+        <span class="d-none d-sm-inline">{{ filterActive ? 'Mostra tutti' : 'Da approvare' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12 col-md-6 col-lg-4"
+         *ngFor="let request of permessionRequestList$ | async">
+      <app-permession-card [request]="request"></app-permession-card>
+    </div>
+  </div>
+
+  <div class="text-center text-muted mt-5" *ngIf="(permessionRequestList$ | async)?.length === 0">
+    <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+    <p class="mt-2">Nessuna richiesta trovata</p>
+  </div>
+
+</div>

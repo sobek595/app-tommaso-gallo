@@ -1,0 +1,106 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="card shadow-sm" style="width: 100%; max-width: 460px;">
+
+    <div class="card-body p-4">
+      <div class="text-center mb-4">
+        <i class="bi bi-person-plus-fill text-primary" style="font-size: 2rem;"></i>
+        <h5 class="fw-bold mt-2 mb-1">Crea account</h5>
+        <p class="text-muted small mb-0">Gestionale permessi</p>
+      </div>
+      <form (ngSubmit)="register()" [formGroup]="registerForm">
+
+        <div class="row g-3 mb-3">
+          <div class="col-6">
+            <label class="form-label fw-semibold small">Nome</label>
+            <div class="input-group" [class.is-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
+              <input type="text" class="form-control border-start-0 ps-0"
+                formControlName="firstName" placeholder="Mario"
+                [class.is-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" />
+            </div>
+            <div class="invalid-feedback d-block"
+              *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+              Il nome è obbligatorio
+            </div>
+          </div>
+          <div class="col-6">
+            <label class="form-label fw-semibold small">Cognome</label>
+            <div class="input-group" [class.is-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+              <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
+              <input type="text" class="form-control border-start-0 ps-0"
+                formControlName="lastName" placeholder="Rossi"
+                [class.is-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" />
+            </div>
+            <div class="invalid-feedback d-block"
+              *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+              Il cognome è obbligatorio
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold small">Ruolo</label>
+          <div class="input-group" [class.is-invalid]="registerForm.get('role')?.invalid && registerForm.get('role')?.touched">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-briefcase text-muted"></i></span>
+            <select class="form-select border-start-0" formControlName="role"
+              [class.is-invalid]="registerForm.get('role')?.invalid && registerForm.get('role')?.touched">
+              <option [ngValue]="null" disabled selected>-- Seleziona ruolo --</option>
+              <option *ngFor="let r of roles" [value]="r">{{ r | titlecase }}</option>
+            </select>
+          </div>
+          <div class="invalid-feedback d-block"
+            *ngIf="registerForm.get('role')?.invalid && registerForm.get('role')?.touched">
+            Il ruolo è obbligatorio
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold small">Email</label>
+          <div class="input-group" [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+            <input type="email" class="form-control border-start-0 ps-0"
+              formControlName="email" placeholder="nome@azienda.it"
+              [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" />
+          </div>
+          <div class="invalid-feedback d-block"
+            *ngIf="registerForm.get('email')?.touched">
+            <span *ngIf="registerForm.get('email')?.hasError('required')">L'email è obbligatoria</span>
+            <span *ngIf="registerForm.get('email')?.hasError('email')">Inserire un'email valida</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold small">Password</label>
+          <div class="input-group" [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-lock text-muted"></i></span>
+            <input type="password" class="form-control border-start-0 ps-0"
+              formControlName="password" placeholder="••••••••"
+              [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" />
+          </div>
+          <div class="invalid-feedback d-block"
+            *ngIf="registerForm.get('password')?.touched">
+            <span *ngIf="registerForm.get('password')?.hasError('required')">La password è obbligatoria</span>
+            <span *ngIf="registerForm.get('password')?.hasError('minlength')">La password deve contenere almeno 8 caratteri</span>
+            <span *ngIf="registerForm.get('password')?.hasError('noUppercase')">La password deve contenere almeno una lettera maiuscola</span>
+            <span *ngIf="registerForm.get('password')?.hasError('notEnoughDigits')">La password deve contenere almeno 2 numeri</span>
+            <span *ngIf="registerForm.get('password')?.hasError('noSpecialChar')">La password deve contenere almeno un carattere speciale (!&#64;#$%...)</span>
+          </div>
+        </div>
+
+        <div class="alert alert-danger py-2 small" *ngIf="registerError">
+          <i class="bi bi-exclamation-circle me-1"></i>{{ registerError }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+          <i class="bi bi-check-circle me-2"></i>Registrati
+        </button>
+
+      </form>
+
+      <div class="text-center mt-3">
+        <small class="text-muted">Hai già un account? <a [routerLink]="['/login']" class="text-primary fw-semibold">Accedi</a></small>
+      </div>
+    </div>
+
+  </div>
+</div>
