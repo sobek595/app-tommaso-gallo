@@ -2,39 +2,80 @@
 
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h5 class="fw-bold mb-0 d-flex align-items-center gap-2">
-      <i class="bi bi-list-check text-primary"></i> Richieste di permesso
+      <i class="bi bi-mortarboard text-primary"></i> Assegnazioni corsi
     </h5>
     <div class="d-flex gap-2">
-      <!-- Crea permesso: solo employee -->
       <button class="btn btn-success d-flex align-items-center gap-2"
-              *appEmployeeOnly="currentUser"
+              *appManagerOnly="currentUser"
               (click)="openCreateModal()">
         <i class="bi bi-plus-circle-fill"></i>
-        <span class="d-none d-sm-inline">Nuova richiesta</span>
-      </button>
-
-      <!-- Filtro da approvare: solo manager -->
-      <button *appManagerOnly="currentUser"
-        class="btn d-flex align-items-center gap-2"
-        [class.btn-primary]="filterActive"
-        [class.btn-outline-primary]="!filterActive"
-        (click)="toggleFilter()">
-        <i class="bi" [class.bi-funnel-fill]="filterActive" [class.bi-funnel]="!filterActive"></i>
-        <span class="d-none d-sm-inline">{{ filterActive ? 'Mostra tutti' : 'Da approvare' }}</span>
+        <span class="d-none d-sm-inline">Assegna corso</span>
       </button>
     </div>
   </div>
 
-  <div class="row g-3">
+  <div class="card shadow-sm mb-4">
+    <div class="card-body py-3">
+      <form [formGroup]="filtri" (ngSubmit)="applicaFiltri()" class="row g-2 align-items-end">
+        <div class="col-6 col-md-3">
+          <label class="form-label fw-semibold small mb-1">Stato</label>
+          <select class="form-select form-select-sm" formControlName="stato">
+            <option value="">Tutti</option>
+            <option value="assegnato">Assegnato</option>
+            <option value="completato">Completato</option>
+            <option value="scaduto">Scaduto</option>
+            <option value="annullato">Annullato</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label fw-semibold small mb-1">Categoria</label>
+          <input type="text" class="form-control form-control-sm" formControlName="categoria" placeholder="Es. Sicurezza">
+        </div>
+        <div class="col-6 col-md-3">
+          <label class="form-label fw-semibold small mb-1">Corso</label>
+          <select class="form-select form-select-sm" formControlName="corso">
+            <option value="">Tutti</option>
+            <option *ngFor="let c of corsi" [value]="c.id">{{ c.titolo }}</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-3" *appManagerOnly="currentUser">
+          <label class="form-label fw-semibold small mb-1">Dipendente</label>
+          <select class="form-select form-select-sm" formControlName="dipendente">
+            <option value="">Tutti</option>
+            <option *ngFor="let d of dipendenti" [value]="d.id">{{ d.fullName }}</option>
+          </select>
+        </div>
+        <div class="col-12 d-flex gap-2 justify-content-end">
+          <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center gap-1">
+            <i class="bi bi-funnel"></i> Applica
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" (click)="resetFiltri()">
+            <i class="bi bi-arrow-counterclockwise"></i> Reset
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="error">
+    <i class="bi bi-exclamation-triangle me-1"></i>{{ error }}
+  </div>
+
+  <div class="text-center py-5" *ngIf="loading">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="text-muted mt-2 mb-0">Caricamento...</p>
+  </div>
+
+  <div class="row g-3" *ngIf="!loading">
     <div class="col-12 col-md-6 col-lg-4"
-         *ngFor="let request of permessionRequestList$ | async">
-      <app-permession-card [request]="request"></app-permession-card>
+         *ngFor="let a of assegnazioneList">
+      <app-assegnazione-card [assegnazione]="a" [currentUser]="currentUser" (completa)="onCompleta($event)"></app-assegnazione-card>
     </div>
   </div>
 
-  <div class="text-center text-muted mt-5" *ngIf="(permessionRequestList$ | async)?.length === 0">
+  <div class="text-center text-muted mt-5" *ngIf="!loading && assegnazioneList.length === 0">
     <i class="bi bi-inbox" style="font-size: 3rem;"></i>
-    <p class="mt-2">Nessuna richiesta trovata</p>
+    <p class="mt-2">Nessuna assegnazione trovata</p>
   </div>
 
 </div>
