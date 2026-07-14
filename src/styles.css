@@ -10,3 +10,22 @@ body {
 .btn {
   font-weight: 500;
 }
+
+.detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.detail-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  font-weight: 600;
+}
+.detail-label i {
+  margin-right: 0.25rem;
+}
+.detail-value {
+  font-weight: 500;
+}

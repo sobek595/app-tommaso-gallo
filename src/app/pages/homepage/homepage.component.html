@@ -6,7 +6,7 @@
     </h5>
     <div class="d-flex gap-2">
       <button class="btn btn-success d-flex align-items-center gap-2"
-              *appManagerOnly="currentUser"
+              *appReferenteOnly="currentUser"
               (click)="openCreateModal()">
         <i class="bi bi-plus-circle-fill"></i>
         <span class="d-none d-sm-inline">Assegna corso</span>
@@ -38,7 +38,7 @@
             <option *ngFor="let c of corsi" [value]="c.id">{{ c.titolo }}</option>
           </select>
         </div>
-        <div class="col-6 col-md-3" *appManagerOnly="currentUser">
+        <div class="col-6 col-md-3" *appReferenteOnly="currentUser">
           <label class="form-label fw-semibold small mb-1">Dipendente</label>
           <select class="form-select form-select-sm" formControlName="dipendente">
             <option value="">Tutti</option>

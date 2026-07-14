@@ -3,14 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { authGuard } from './utils/auth.guard';
-import { managerGuard } from './utils/manager.guard';
+import { referenteGuard } from './utils/referente.guard';
 import { HomepageComponent } from './pages/homepage/homepage.component';
 import { CatalogoCorsiComponent } from './pages/catalogo-corsi/catalogo-corsi.component';
 import { DettaglioCorsoComponent } from './pages/dettaglio-corso/dettaglio-corso.component';
 import { DettaglioAssegnazioneComponent } from './pages/dettaglio-assegnazione/dettaglio-assegnazione.component';
 import { StatisticheComponent } from './pages/statistiche/statistiche.component';
-import { PermessionDetailComponent } from './pages/permession-detail/permession-detail.component';
-import { AnaliticsComponent } from './pages/analitics/analitics.component';
 
 const routes: Routes = [
   {
@@ -28,24 +26,14 @@ const routes: Routes = [
     children: []
   },
   {
-    path: 'analitics',
-    component: AnaliticsComponent,
-    canActivate: [authGuard, managerGuard]
-  },
-  {
-    path: 'statistiche',
-    component: StatisticheComponent,
-    canActivate: [authGuard, managerGuard]
-  },
-  {
     path: 'corsi',
     component: CatalogoCorsiComponent,
-    canActivate: [authGuard, managerGuard]
+    canActivate: [authGuard, referenteGuard]
   },
   {
     path: 'corsi/:id',
     component: DettaglioCorsoComponent,
-    canActivate: [authGuard, managerGuard]
+    canActivate: [authGuard, referenteGuard]
   },
   {
     path: 'assegnazioni/:id',
@@ -53,9 +41,9 @@ const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'permessi/:id',
-    component: PermessionDetailComponent,
-    canActivate: [authGuard]
+    path: 'statistiche',
+    component: StatisticheComponent,
+    canActivate: [authGuard, referenteGuard]
   },
   {
     path: '',

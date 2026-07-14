@@ -4,7 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { map, take } from 'rxjs';
 import { UserRole } from '../entities/User';
 
-export const managerGuard: CanActivateFn = (route, state) => {
+export const referenteGuard: CanActivateFn = (route, state) => {
   const authSrv = inject(AuthService);
   const router = inject(Router);
 

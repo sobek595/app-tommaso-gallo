@@ -2,11 +2,11 @@ import { Directive, Input, OnChanges, TemplateRef, ViewContainerRef } from '@ang
 import { User, UserRole } from '../entities/User';
 
 @Directive({
-  selector: '[appManagerOnly]',
+  selector: '[appDipendenteOnly]',
   standalone: false
 })
-export class ManagerOnlyDirective implements OnChanges {
-  @Input() appManagerOnly: User | null = null;
+export class DipendenteOnlyDirective implements OnChanges {
+  @Input() appDipendenteOnly: User | null = null;
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -14,11 +14,10 @@ export class ManagerOnlyDirective implements OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    if (this.appManagerOnly?.role === UserRole.REFERENTE) {
+    if (this.appDipendenteOnly?.role === UserRole.DIPENDENTE) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();
     }
   }
 }
-

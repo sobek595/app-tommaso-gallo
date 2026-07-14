@@ -40,26 +40,17 @@
 
         <div class="row g-3" *ngIf="!editMode">
           <div class="col-12">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-chat-left-text"></i> Descrizione</span>
-              <span class="detail-value">{{ corso.descrizione || '—' }}</span>
-            </div>
+            <app-detail-field label="Descrizione" icon="bi-chat-left-text">{{ corso.descrizione || '—' }}</app-detail-field>
           </div>
           <div class="col-12 col-md-6">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-clock"></i> Durata (ore)</span>
-              <span class="detail-value">{{ corso.durataOre }}</span>
-            </div>
+            <app-detail-field label="Durata (ore)" icon="bi-clock">{{ corso.durataOre }}</app-detail-field>
           </div>
           <div class="col-12 col-md-6">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-exclamation-triangle"></i> Obbligatorio</span>
-              <span class="detail-value">
-                <span class="badge" [class.text-bg-danger]="corso.obbligatorio" [class.text-bg-light]="!corso.obbligatorio">
-                  {{ corso.obbligatorio ? 'Sì' : 'No' }}
-                </span>
+            <app-detail-field label="Obbligatorio" icon="bi-exclamation-triangle">
+              <span class="badge" [class.text-bg-danger]="corso.obbligatorio" [class.text-bg-light]="!corso.obbligatorio">
+                {{ corso.obbligatorio ? 'Sì' : 'No' }}
               </span>
-            </div>
+            </app-detail-field>
           </div>
         </div>
 

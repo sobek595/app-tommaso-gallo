@@ -49,13 +49,20 @@ export class DettaglioAssegnazioneComponent implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
-    this.authSrv.currentUser$.subscribe(u => this.currentUser = u);
-    this.corsoSrv.list({ attivo: 'true' }).subscribe(data => this.corsi = data);
-    this.userSrv.listUsers().subscribe(users => this.dipendenti = users.filter(u => u.role === UserRole.DIPENDENTE));
+    this.authSrv.currentUser$.subscribe(u => {
+      this.currentUser = u;
+      this.caricaOpzioniEdit();
+    });
     this.assegnazioneSrv.getById(id).subscribe({
       next: (data) => { this.assegnazione = data; this.loading = false; this.patchForm(data); },
       error: () => { this.error = 'Assegnazione non trovata.'; this.loading = false; }
     });
+  }
+
+  private caricaOpzioniEdit() {
+    if (this.currentUser?.role !== UserRole.REFERENTE) return;
+    this.corsoSrv.list({ attivo: 'true' }).subscribe(data => this.corsi = data);
+    this.userSrv.listUsers().subscribe(users => this.dipendenti = users.filter(u => u.role === UserRole.DIPENDENTE));
   }
 
   private toInputDate(d: string | null): string {

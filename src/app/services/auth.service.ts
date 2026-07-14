@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { JwtService } from './jwt.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { catchError, distinctUntilChanged, map, of, ReplaySubject, tap } from 'rxjs';
+import { distinctUntilChanged, map, ReplaySubject, tap } from 'rxjs';
 import { User } from '../entities/User';
 
 @Injectable({
@@ -17,8 +17,7 @@ export class AuthService {
   isAuthenticated$ = this.currentUser$
                       .pipe(
                         map(user => !!user),
-                        distinctUntilChanged(),
-                        tap(isLoggedIn => console.log(isLoggedIn))
+                        distinctUntilChanged()
                       );
   
   login(email: string, password: string) {

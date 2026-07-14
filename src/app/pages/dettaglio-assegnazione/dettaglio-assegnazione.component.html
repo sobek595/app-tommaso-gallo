@@ -1,156 +1,124 @@
-<div class="container mt-4">
+<ng-container *ngIf="assegnazione && !loading">
 
-  <div *ngIf="loading" class="text-center mt-5">
-    <div class="spinner-border text-primary" role="status"></div>
-  </div>
+  <button class="btn btn-outline-secondary d-flex align-items-center gap-2 mb-4" (click)="goBack()">
+    <i class="bi bi-arrow-left"></i> Torna alla lista
+  </button>
 
-  <div *ngIf="error && !assegnazione" class="alert alert-danger d-flex align-items-center gap-2">
-    <i class="bi bi-exclamation-circle-fill"></i>{{ error }}
-    <button class="btn btn-sm btn-outline-secondary ms-auto" (click)="goBack()">Torna alla lista</button>
-  </div>
-
-  <ng-container *ngIf="assegnazione && !loading">
-
-    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 mb-4" (click)="goBack()">
-      <i class="bi bi-arrow-left"></i> Torna alla lista
-    </button>
-
-    <div class="card shadow">
-      <div class="card-header d-flex justify-content-between align-items-center py-3 px-4 flex-wrap gap-2">
-        <div class="d-flex align-items-center gap-3">
-          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;">
-            <i class="bi bi-mortarboard text-white fs-5"></i>
-          </div>
-          <div>
-            <h5 class="mb-0 fw-bold">{{ assegnazione.corsoId.titolo }}</h5>
-            <small class="text-muted"><i class="bi bi-person me-1"></i>{{ assegnazione.dipendenteId.fullName }}</small>
-          </div>
+  <div class="card shadow">
+    <div class="card-header d-flex justify-content-between align-items-center py-3 px-4 flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;">
+          <i class="bi bi-mortarboard text-white fs-5"></i>
         </div>
-        <span class="badge {{ statoClass }}">{{ statoLabel }}</span>
+        <div>
+          <h5 class="mb-0 fw-bold">{{ assegnazione.corsoId.titolo }}</h5>
+          <small class="text-muted"><i class="bi bi-person me-1"></i>{{ assegnazione.dipendenteId.fullName }}</small>
+        </div>
+      </div>
+      <span class="badge {{ statoClass }}">{{ statoLabel }}</span>
+    </div>
+
+    <div class="card-body p-4">
+
+      <div class="alert alert-danger d-flex align-items-center gap-2" *ngIf="error">
+        <i class="bi bi-exclamation-circle-fill"></i>{{ error }}
       </div>
 
-      <div class="card-body p-4">
-
-        <div class="alert alert-danger d-flex align-items-center gap-2" *ngIf="error">
-          <i class="bi bi-exclamation-circle-fill"></i>{{ error }}
+      <div class="row g-3" *ngIf="!editMode">
+        <div class="col-12 col-md-6">
+          <app-detail-field label="Categoria" icon="bi-tag">{{ assegnazione.corsoId.categoria }}</app-detail-field>
         </div>
+        <div class="col-12 col-md-6">
+          <app-detail-field label="Durata (ore)" icon="bi-clock">{{ assegnazione.corsoId.durataOre }}</app-detail-field>
+        </div>
+        <div class="col-12">
+          <app-detail-field label="Descrizione corso" icon="bi-chat-left-text">{{ assegnazione.corsoId.descrizione || '—' }}</app-detail-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-detail-field label="Assegnazione" icon="bi-calendar-event">{{ assegnazione.dataAssegnazione ? (assegnazione.dataAssegnazione | date:'dd/MM/yyyy') : '-' }}</app-detail-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-detail-field label="Scadenza" icon="bi-calendar-check">{{ assegnazione.dataScadenza ? (assegnazione.dataScadenza | date:'dd/MM/yyyy') : '-' }}</app-detail-field>
+        </div>
+        <div class="col-12 col-md-4">
+          <app-detail-field label="Completamento" icon="bi-clipboard-check">{{ assegnazione.dataCompletamento ? (assegnazione.dataCompletamento | date:'dd/MM/yyyy') : '—' }}</app-detail-field>
+        </div>
+      </div>
 
-        <div class="row g-3" *ngIf="!editMode">
+      <form [formGroup]="editForm" (ngSubmit)="onSave()" *ngIf="editMode">
+        <div class="row g-3">
           <div class="col-12 col-md-6">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-tag"></i> Categoria</span>
-              <span class="detail-value">{{ assegnazione.corsoId.categoria }}</span>
-            </div>
+            <label class="form-label fw-semibold small">Corso <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="corsoId">
+              <option *ngFor="let c of corsi" [value]="c.id">{{ c.titolo }} ({{ c.categoria }})</option>
+            </select>
           </div>
           <div class="col-12 col-md-6">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-clock"></i> Durata (ore)</span>
-              <span class="detail-value">{{ assegnazione.corsoId.durataOre }}</span>
-            </div>
+            <label class="form-label fw-semibold small">Dipendente <span class="text-danger">*</span></label>
+            <select class="form-select form-select-sm" formControlName="dipendenteId">
+              <option *ngFor="let d of dipendenti" [value]="d.id">{{ d.fullName }}</option>
+            </select>
           </div>
-          <div class="col-12">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-chat-left-text"></i> Descrizione corso</span>
-              <span class="detail-value">{{ assegnazione.corsoId.descrizione || '—' }}</span>
-            </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold small">Data assegnazione <span class="text-danger">*</span></label>
+            <input type="date" class="form-control form-control-sm" formControlName="dataAssegnazione" />
           </div>
-          <div class="col-12 col-md-4">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-calendar-event"></i> Assegnazione</span>
-              <span class="detail-value">{{ assegnazione.dataAssegnazione ? (assegnazione.dataAssegnazione | date:'dd/MM/yyyy') : '-' }}</span>
-            </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold small">Data scadenza <span class="text-danger">*</span></label>
+            <input type="date" class="form-control form-control-sm" formControlName="dataScadenza" />
           </div>
-          <div class="col-12 col-md-4">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-calendar-check"></i> Scadenza</span>
-              <span class="detail-value">{{ assegnazione.dataScadenza ? (assegnazione.dataScadenza | date:'dd/MM/yyyy') : '-' }}</span>
-            </div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="detail-field">
-              <span class="detail-label"><i class="bi bi-clipboard-check"></i> Completamento</span>
-              <span class="detail-value">{{ assegnazione.dataCompletamento ? (assegnazione.dataCompletamento | date:'dd/MM/yyyy') : '—' }}</span>
-            </div>
+          <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+            <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center gap-1" [disabled]="editForm.invalid || saving"
+                    style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none;">
+              <span *ngIf="saving" class="spinner-border spinner-border-sm"></span>
+              <i *ngIf="!saving" class="bi bi-floppy"></i> Salva
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" (click)="onEditToggle()" [disabled]="saving">
+              <i class="bi bi-x"></i> Annulla modifica
+            </button>
           </div>
         </div>
-
-        <form [formGroup]="editForm" (ngSubmit)="onSave()" *ngIf="editMode">
-          <div class="row g-3">
-            <div class="col-12 col-md-6">
-              <label class="form-label fw-semibold small">Corso <span class="text-danger">*</span></label>
-              <select class="form-select form-select-sm" formControlName="corsoId">
-                <option *ngFor="let c of corsi" [value]="c.id">{{ c.titolo }} ({{ c.categoria }})</option>
-              </select>
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="form-label fw-semibold small">Dipendente <span class="text-danger">*</span></label>
-              <select class="form-select form-select-sm" formControlName="dipendenteId">
-                <option *ngFor="let d of dipendenti" [value]="d.id">{{ d.fullName }}</option>
-              </select>
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="form-label fw-semibold small">Data assegnazione <span class="text-danger">*</span></label>
-              <input type="date" class="form-control form-control-sm" formControlName="dataAssegnazione" />
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="form-label fw-semibold small">Data scadenza <span class="text-danger">*</span></label>
-              <input type="date" class="form-control form-control-sm" formControlName="dataScadenza" />
-            </div>
-            <div class="col-12 d-flex justify-content-end gap-2 mt-2">
-              <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center gap-1" [disabled]="editForm.invalid || saving"
-                      style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none;">
-                <span *ngIf="saving" class="spinner-border spinner-border-sm"></span>
-                <i *ngIf="!saving" class="bi bi-floppy"></i> Salva
-              </button>
-              <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" (click)="onEditToggle()" [disabled]="saving">
-                <i class="bi bi-x"></i> Annulla modifica
-              </button>
-            </div>
-          </div>
-        </form>
-
-      </div>
-
-      <div class="card-footer d-flex justify-content-between align-items-center gap-2 py-3 px-4 flex-wrap" *ngIf="!editMode">
-
-        <!-- DIPENDENTE: completa (solo se assegnato) -->
-        <ng-container *appEmployeeOnly="currentUser">
-          <button class="btn btn-success d-flex align-items-center gap-2"
-                  (click)="onCompleta()"
-                  [disabled]="completando || assegnazione.stato !== StatoAssegnazione.ASSEGNATO">
-            <span *ngIf="completando" class="spinner-border spinner-border-sm"></span>
-            <i *ngIf="!completando" class="bi bi-check-circle"></i>
-            Segna come completato
-          </button>
-        </ng-container>
-
-        <!-- REFERENTE: modifica + annulla -->
-        <ng-container *appManagerOnly="currentUser">
-          <button class="btn btn-outline-primary d-flex align-items-center gap-2" (click)="onEditToggle()"
-                  [disabled]="assegnazione.stato === StatoAssegnazione.ANNULLATO">
-            <i class="bi bi-pencil"></i> Modifica
-          </button>
-          <div class="d-flex gap-2 align-items-center ms-auto">
-            <ng-container *ngIf="!confirmAnnulla">
-              <button class="btn btn-outline-danger d-flex align-items-center gap-2" (click)="onAnnullaClick()"
-                      [disabled]="annullando || assegnazione.stato === StatoAssegnazione.ANNULLATO">
-                <i class="bi bi-slash-circle"></i> Annulla
-              </button>
-            </ng-container>
-            <ng-container *ngIf="confirmAnnulla">
-              <span class="text-danger fw-semibold small me-1"><i class="bi bi-exclamation-triangle me-1"></i>Sicuro?</span>
-              <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="onAnnullaConfirm()" [disabled]="annullando">
-                <span *ngIf="annullando" class="spinner-border spinner-border-sm"></span>
-                <i *ngIf="!annullando" class="bi bi-check-lg"></i> Sì, annulla
-              </button>
-              <button class="btn btn-secondary btn-sm" (click)="onAnnullaCancel()" [disabled]="annullando">No</button>
-            </ng-container>
-          </div>
-        </ng-container>
-
-      </div>
+      </form>
 
     </div>
 
-  </ng-container>
-</div>
+    <div class="card-footer d-flex justify-content-between align-items-center gap-2 py-3 px-4 flex-wrap" *ngIf="!editMode">
+
+      <ng-container *appDipendenteOnly="currentUser">
+        <button class="btn btn-success d-flex align-items-center gap-2"
+                (click)="onCompleta()"
+                [disabled]="completando || assegnazione.stato !== StatoAssegnazione.ASSEGNATO">
+          <span *ngIf="completando" class="spinner-border spinner-border-sm"></span>
+          <i *ngIf="!completando" class="bi bi-check-circle"></i>
+          Segna come completato
+        </button>
+      </ng-container>
+
+      <ng-container *appReferenteOnly="currentUser">
+        <button class="btn btn-outline-primary d-flex align-items-center gap-2" (click)="onEditToggle()"
+                [disabled]="assegnazione.stato === StatoAssegnazione.ANNULLATO">
+          <i class="bi bi-pencil"></i> Modifica
+        </button>
+        <div class="d-flex gap-2 align-items-center ms-auto">
+          <ng-container *ngIf="!confirmAnnulla">
+            <button class="btn btn-outline-danger d-flex align-items-center gap-2" (click)="onAnnullaClick()"
+                    [disabled]="annullando || assegnazione.stato === StatoAssegnazione.ANNULLATO">
+              <i class="bi bi-slash-circle"></i> Annulla
+            </button>
+          </ng-container>
+          <ng-container *ngIf="confirmAnnulla">
+            <span class="text-danger fw-semibold small me-1"><i class="bi bi-exclamation-triangle me-1"></i>Sicuro?</span>
+            <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="onAnnullaConfirm()" [disabled]="annullando">
+              <span *ngIf="annullando" class="spinner-border spinner-border-sm"></span>
+              <i *ngIf="!annullando" class="bi bi-check-lg"></i> Sì, annulla
+            </button>
+            <button class="btn btn-secondary btn-sm" (click)="onAnnullaCancel()" [disabled]="annullando">No</button>
+          </ng-container>
+        </div>
+      </ng-container>
+
+    </div>
+
+  </div>
+
+</ng-container>

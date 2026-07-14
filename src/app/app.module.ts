@@ -12,20 +12,16 @@ import { HomepageComponent } from './pages/homepage/homepage.component';
 import { authInterceptor } from './utils/auth.interceptor';
 import { urlInterceptor } from './utils/url.interceptor';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { PermessionCardComponent } from './components/permession-card/permession-card.component';
+import { DetailFieldComponent } from './components/detail-field/detail-field.component';
 import { AssegnazioneCardComponent } from './components/assegnazione-card/assegnazione-card.component';
-import { PermessionDetailComponent } from './pages/permession-detail/permession-detail.component';
 import { DettaglioAssegnazioneComponent } from './pages/dettaglio-assegnazione/dettaglio-assegnazione.component';
 import { StatisticheComponent } from './pages/statistiche/statistiche.component';
-import { PendingOnlyDirective } from './utils/pending-only.directive';
-import { ManagerOnlyDirective } from './utils/manager-only.directive';
-import { EmployeeOnlyDirective } from './utils/employee-only.directive';
-import { CreatePermessionModalComponent } from './components/create-permession-modal/create-permession-modal.component';
+import { ReferenteOnlyDirective } from './utils/referente-only.directive';
+import { DipendenteOnlyDirective } from './utils/dipendente-only.directive';
 import { CreateCorsoModalComponent } from './components/create-corso-modal/create-corso-modal.component';
 import { CreateAssegnazioneModalComponent } from './components/create-assegnazione-modal/create-assegnazione-modal.component';
 import { CatalogoCorsiComponent } from './pages/catalogo-corsi/catalogo-corsi.component';
 import { DettaglioCorsoComponent } from './pages/dettaglio-corso/dettaglio-corso.component';
-import { AnaliticsComponent } from './pages/analitics/analitics.component';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
@@ -35,20 +31,16 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
     RegisterComponent,
     HomepageComponent,
     NavBarComponent,
-    PermessionCardComponent,
+    DetailFieldComponent,
     AssegnazioneCardComponent,
-    PermessionDetailComponent,
     DettaglioAssegnazioneComponent,
     StatisticheComponent,
-    PendingOnlyDirective,
-    ManagerOnlyDirective,
-    EmployeeOnlyDirective,
-    CreatePermessionModalComponent,
+    ReferenteOnlyDirective,
+    DipendenteOnlyDirective,
     CreateCorsoModalComponent,
     CreateAssegnazioneModalComponent,
     CatalogoCorsiComponent,
-    DettaglioCorsoComponent,
-    AnaliticsComponent
+    DettaglioCorsoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from '../../entities/User';
 
 @Component({
@@ -14,10 +13,6 @@ export class NavBarComponent {
 
   @Output('logout')
   logoutEvent = new EventEmitter<void>();
-
-  protected authSrv = inject(AuthService);
-  
-  currentUser$ = this.authSrv.currentUser$;
 
   logout() {
     this.logoutEvent.emit();

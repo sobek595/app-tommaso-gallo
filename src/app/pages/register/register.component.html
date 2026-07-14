@@ -5,7 +5,7 @@
       <div class="text-center mb-4">
         <i class="bi bi-person-plus-fill text-primary" style="font-size: 2rem;"></i>
         <h5 class="fw-bold mt-2 mb-1">Crea account</h5>
-        <p class="text-muted small mb-0">Gestionale permessi</p>
+        <p class="text-muted small mb-0">Gestionale Academy</p>
       </div>
       <form (ngSubmit)="register()" [formGroup]="registerForm">
 
@@ -81,8 +81,7 @@
             *ngIf="registerForm.get('password')?.touched">
             <span *ngIf="registerForm.get('password')?.hasError('required')">La password è obbligatoria</span>
             <span *ngIf="registerForm.get('password')?.hasError('minlength')">La password deve contenere almeno 8 caratteri</span>
-            <span *ngIf="registerForm.get('password')?.hasError('noUppercase')">La password deve contenere almeno una lettera maiuscola</span>
-            <span *ngIf="registerForm.get('password')?.hasError('notEnoughDigits')">La password deve contenere almeno 2 numeri</span>
+            <span *ngIf="registerForm.get('password')?.hasError('noDigit')">La password deve contenere almeno un numero</span>
             <span *ngIf="registerForm.get('password')?.hasError('noSpecialChar')">La password deve contenere almeno un carattere speciale (!&#64;#$%...)</span>
           </div>
         </div>
