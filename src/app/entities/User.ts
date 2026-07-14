@@ -1,11 +1,12 @@
 export enum UserRole {
-    MANAGER = "manager",
-    EMPLOYEE = "employee",
+    DIPENDENTE = "dipendente",
+    REFERENTE = "referente",
 }
+
 export type User = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  role: UserRole;
+    id: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    role: UserRole;
 }
