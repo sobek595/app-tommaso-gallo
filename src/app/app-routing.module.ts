@@ -8,6 +8,7 @@ import { HomepageComponent } from './pages/homepage/homepage.component';
 import { CatalogoCorsiComponent } from './pages/catalogo-corsi/catalogo-corsi.component';
 import { DettaglioCorsoComponent } from './pages/dettaglio-corso/dettaglio-corso.component';
 import { DettaglioAssegnazioneComponent } from './pages/dettaglio-assegnazione/dettaglio-assegnazione.component';
+import { StatisticheComponent } from './pages/statistiche/statistiche.component';
 import { PermessionDetailComponent } from './pages/permession-detail/permession-detail.component';
 import { AnaliticsComponent } from './pages/analitics/analitics.component';
 
@@ -29,6 +30,11 @@ const routes: Routes = [
   {
     path: 'analitics',
     component: AnaliticsComponent,
+    canActivate: [authGuard, managerGuard]
+  },
+  {
+    path: 'statistiche',
+    component: StatisticheComponent,
     canActivate: [authGuard, managerGuard]
   },
   {

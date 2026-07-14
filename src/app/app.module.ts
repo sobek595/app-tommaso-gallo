@@ -16,6 +16,7 @@ import { PermessionCardComponent } from './components/permession-card/permession
 import { AssegnazioneCardComponent } from './components/assegnazione-card/assegnazione-card.component';
 import { PermessionDetailComponent } from './pages/permession-detail/permession-detail.component';
 import { DettaglioAssegnazioneComponent } from './pages/dettaglio-assegnazione/dettaglio-assegnazione.component';
+import { StatisticheComponent } from './pages/statistiche/statistiche.component';
 import { PendingOnlyDirective } from './utils/pending-only.directive';
 import { ManagerOnlyDirective } from './utils/manager-only.directive';
 import { EmployeeOnlyDirective } from './utils/employee-only.directive';
@@ -38,6 +39,7 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
     AssegnazioneCardComponent,
     PermessionDetailComponent,
     DettaglioAssegnazioneComponent,
+    StatisticheComponent,
     PendingOnlyDirective,
     ManagerOnlyDirective,
     EmployeeOnlyDirective,
