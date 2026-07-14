@@ -11,7 +11,7 @@ export const managerGuard: CanActivateFn = (route, state) => {
   return authSrv.currentUser$.pipe(
     take(1),
     map(user => {
-      if (user?.role === UserRole.MANAGER) {
+      if (user?.role === UserRole.REFERENTE) {
         return true;
       }
       return router.createUrlTree(['/homepage']);

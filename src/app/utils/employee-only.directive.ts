@@ -14,7 +14,7 @@ export class EmployeeOnlyDirective implements OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    if (this.appEmployeeOnly?.role === UserRole.EMPLOYEE) {
+    if (this.appEmployeeOnly?.role === UserRole.DIPENDENTE) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();

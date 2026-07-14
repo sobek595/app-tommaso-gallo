@@ -14,7 +14,7 @@ export class ManagerOnlyDirective implements OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    if (this.appManagerOnly?.role === UserRole.MANAGER) {
+    if (this.appManagerOnly?.role === UserRole.REFERENTE) {
       this.viewContainer.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainer.clear();
