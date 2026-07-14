@@ -18,6 +18,10 @@ import { PendingOnlyDirective } from './utils/pending-only.directive';
 import { ManagerOnlyDirective } from './utils/manager-only.directive';
 import { EmployeeOnlyDirective } from './utils/employee-only.directive';
 import { CreatePermessionModalComponent } from './components/create-permession-modal/create-permession-modal.component';
+import { CreateCorsoModalComponent } from './components/create-corso-modal/create-corso-modal.component';
+import { CreateAssegnazioneModalComponent } from './components/create-assegnazione-modal/create-assegnazione-modal.component';
+import { CatalogoCorsiComponent } from './pages/catalogo-corsi/catalogo-corsi.component';
+import { DettaglioCorsoComponent } from './pages/dettaglio-corso/dettaglio-corso.component';
 import { AnaliticsComponent } from './pages/analitics/analitics.component';
 import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
@@ -34,6 +38,10 @@ import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2
     ManagerOnlyDirective,
     EmployeeOnlyDirective,
     CreatePermessionModalComponent,
+    CreateCorsoModalComponent,
+    CreateAssegnazioneModalComponent,
+    CatalogoCorsiComponent,
+    DettaglioCorsoComponent,
     AnaliticsComponent
   ],
   imports: [

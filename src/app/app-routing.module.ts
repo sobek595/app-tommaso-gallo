@@ -5,6 +5,8 @@ import { RegisterComponent } from './pages/register/register.component';
 import { authGuard } from './utils/auth.guard';
 import { managerGuard } from './utils/manager.guard';
 import { HomepageComponent } from './pages/homepage/homepage.component';
+import { CatalogoCorsiComponent } from './pages/catalogo-corsi/catalogo-corsi.component';
+import { DettaglioCorsoComponent } from './pages/dettaglio-corso/dettaglio-corso.component';
 import { PermessionDetailComponent } from './pages/permession-detail/permession-detail.component';
 import { AnaliticsComponent } from './pages/analitics/analitics.component';
 
@@ -26,6 +28,16 @@ const routes: Routes = [
   {
     path: 'analitics',
     component: AnaliticsComponent,
+    canActivate: [authGuard, managerGuard]
+  },
+  {
+    path: 'corsi',
+    component: CatalogoCorsiComponent,
+    canActivate: [authGuard, managerGuard]
+  },
+  {
+    path: 'corsi/:id',
+    component: DettaglioCorsoComponent,
     canActivate: [authGuard, managerGuard]
   },
   {

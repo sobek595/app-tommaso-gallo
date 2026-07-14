@@ -1,0 +1,10 @@
+.table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6b7280;
+}
+
+.row-clickable:hover {
+  background-color: #f1f5f9;
+}

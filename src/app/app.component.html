@@ -10,6 +10,9 @@
           <a class="nav-link" routerLink="/homepage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Homepage</a>
         </li>
         <li class="nav-item" *appManagerOnly="(currentUser$ | async)">
+          <a class="nav-link" routerLink="/corsi" routerLinkActive="active">Corsi</a>
+        </li>
+        <li class="nav-item" *appManagerOnly="(currentUser$ | async)">
           <a class="nav-link" routerLink="/analitics" routerLinkActive="active">Analitics</a>
         </li>
       </ng-container>

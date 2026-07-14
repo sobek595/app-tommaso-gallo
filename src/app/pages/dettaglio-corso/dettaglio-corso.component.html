@@ -1,0 +1,164 @@
+<div class="container mt-4">
+
+  <div *ngIf="loading" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="error && !corso" class="alert alert-danger d-flex align-items-center gap-2">
+    <i class="bi bi-exclamation-circle-fill"></i>{{ error }}
+    <button class="btn btn-sm btn-outline-secondary ms-auto" (click)="goBack()">Torna al catalogo</button>
+  </div>
+
+  <ng-container *ngIf="corso && !loading">
+
+    <button class="btn btn-outline-secondary d-flex align-items-center gap-2 mb-4" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Torna al catalogo
+    </button>
+
+    <div class="card shadow">
+
+      <div class="card-header d-flex justify-content-between align-items-center py-3 px-4 flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;">
+            <i class="bi bi-book text-white fs-5"></i>
+          </div>
+          <div>
+            <h5 class="mb-0 fw-bold">{{ corso.titolo }}</h5>
+            <small class="text-muted"><i class="bi bi-tag me-1"></i>{{ corso.categoria }}</small>
+          </div>
+        </div>
+        <span class="badge" [class.text-bg-success]="corso.attivo" [class.text-bg-secondary]="!corso.attivo">
+          {{ corso.attivo ? 'Attivo' : 'Non attivo' }}
+        </span>
+      </div>
+
+      <div class="card-body p-4">
+
+        <div class="alert alert-danger d-flex align-items-center gap-2" *ngIf="error">
+          <i class="bi bi-exclamation-circle-fill"></i>{{ error }}
+        </div>
+
+        <div class="row g-3" *ngIf="!editMode">
+          <div class="col-12">
+            <div class="detail-field">
+              <span class="detail-label"><i class="bi bi-chat-left-text"></i> Descrizione</span>
+              <span class="detail-value">{{ corso.descrizione || '—' }}</span>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="detail-field">
+              <span class="detail-label"><i class="bi bi-clock"></i> Durata (ore)</span>
+              <span class="detail-value">{{ corso.durataOre }}</span>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="detail-field">
+              <span class="detail-label"><i class="bi bi-exclamation-triangle"></i> Obbligatorio</span>
+              <span class="detail-value">
+                <span class="badge" [class.text-bg-danger]="corso.obbligatorio" [class.text-bg-light]="!corso.obbligatorio">
+                  {{ corso.obbligatorio ? 'Sì' : 'No' }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <form [formGroup]="editForm" (ngSubmit)="onSave()" *ngIf="editMode">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-semibold small">Titolo <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-type text-muted"></i></span>
+                <input type="text" class="form-control border-start-0" formControlName="titolo" />
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold small">Descrizione</label>
+              <div class="input-group align-items-start">
+                <span class="input-group-text bg-light border-end-0 pt-2"><i class="bi bi-chat-left-text text-muted"></i></span>
+                <textarea class="form-control border-start-0" formControlName="descrizione" rows="2"></textarea>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label fw-semibold small">Categoria <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-tag text-muted"></i></span>
+                <input type="text" class="form-control border-start-0" formControlName="categoria" list="categorieList" />
+                <datalist id="categorieList">
+                  <option value="Sicurezza"></option>
+                  <option value="Compliance"></option>
+                  <option value="Tecnico"></option>
+                </datalist>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label fw-semibold small">Durata (ore) <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-clock text-muted"></i></span>
+                <input type="number" min="1" class="form-control border-start-0" formControlName="durataOre" />
+              </div>
+            </div>
+            <div class="col-12 d-flex flex-wrap gap-4 pt-1">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="obbligatorio" formControlName="obbligatorio">
+                <label class="form-check-label small fw-semibold" for="obbligatorio">Obbligatorio</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="attivo" formControlName="attivo">
+                <label class="form-check-label small fw-semibold" for="attivo">Attivo</label>
+              </div>
+            </div>
+            <div class="col-12 d-flex justify-content-end gap-2 mt-2">
+              <button type="submit" class="btn btn-primary d-flex align-items-center gap-2" [disabled]="editForm.invalid || saving"
+                      style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none;">
+                <span *ngIf="saving" class="spinner-border spinner-border-sm"></span>
+                <i *ngIf="!saving" class="bi bi-floppy"></i>
+                Salva modifiche
+              </button>
+              <button type="button" class="btn btn-outline-secondary d-flex align-items-center gap-2" (click)="onEditToggle()" [disabled]="saving">
+                <i class="bi bi-x"></i> Annulla
+              </button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="card-footer d-flex justify-content-between align-items-center gap-2 py-3 px-4 flex-wrap" *ngIf="!editMode">
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+          <button class="btn btn-outline-primary d-flex align-items-center gap-2" (click)="onEditToggle()">
+            <i class="bi bi-pencil"></i> Modifica
+          </button>
+          <button class="btn btn-primary d-flex align-items-center gap-2"
+                  (click)="openAssegnaModal()"
+                  [disabled]="!corso.attivo"
+                  style="background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none;">
+            <i class="bi bi-person-plus"></i> Assegna
+          </button>
+        </div>
+        <div class="d-flex gap-2 align-items-center flex-wrap">
+          <button class="btn btn-outline-warning d-flex align-items-center gap-2" (click)="onDisattiva()" [disabled]="disattivando || !corso.attivo">
+            <span *ngIf="disattivando" class="spinner-border spinner-border-sm"></span>
+            <i *ngIf="!disattivando" class="bi bi-slash-circle"></i>
+            Disattiva
+          </button>
+          <ng-container *ngIf="!confirmDelete">
+            <button class="btn btn-outline-danger d-flex align-items-center gap-2" (click)="onDeleteClick()" [disabled]="deleting">
+              <i class="bi bi-trash"></i> Elimina
+            </button>
+          </ng-container>
+          <ng-container *ngIf="confirmDelete">
+            <span class="text-danger fw-semibold small me-1"><i class="bi bi-exclamation-triangle me-1"></i>Sicuro?</span>
+            <button class="btn btn-danger btn-sm d-flex align-items-center gap-1" (click)="onDeleteConfirm()" [disabled]="deleting">
+              <span *ngIf="deleting" class="spinner-border spinner-border-sm"></span>
+              <i *ngIf="!deleting" class="bi bi-trash"></i> Sì, elimina
+            </button>
+            <button class="btn btn-secondary btn-sm" (click)="onDeleteCancel()" [disabled]="deleting">Annulla</button>
+          </ng-container>
+        </div>
+      </div>
+
+    </div>
+
+  </ng-container>
+</div>
